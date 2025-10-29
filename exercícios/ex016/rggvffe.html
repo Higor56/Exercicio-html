@@ -1,0 +1,111 @@
+<!--código dos dados do cliente aqui-->
+<table style="width: 100%; border-collapse: collapse; font-size:9px;">
+    <!-- Linha de Cabeçalho com Coluna Adicional -->
+    <tr>
+        <td colspan="6" style="font-weight: bold; padding-bottom: 8px; width: 80%;">1. Dados da Empresa:</td>
+    </tr>
+    <tr>
+        <td colspan="6" style="padding-bottom: 8px; width: 80%;">Empresa: {{doc.cliente}}</td>
+    </tr>
+    <tr>
+        <td colspan="4" style="padding-bottom: 8px; width: 50%;">Cidade: {{ frappe.db.get_value("Address", frappe.db.get_value("Sales Order", doc.sales_order_reference, "shipping_address_name"), "city") or "" }} - {{ frappe.db.get_value("Address", frappe.db.get_value("Sales Order", doc.sales_order_reference, "shipping_address_name"), "uf") or "" }}</td>
+        <td colspan="2" style="padding-bottom: 8px; width: 30%;">Data: {{ doc.data_inicio }}</td>
+    </tr>
+</table>
+<br/>
+
+<!--Equipamentos-->
+<table style="width: 100%; border-collapse: collapse; font-size:9px;">
+    <!-- Linha de Cabeçalho com Coluna Adicional -->
+        <tr>
+        <td colspan="6" style="font-weight: bold; padding-bottom: 8px; width: 100%;">2. Equipamentos:</td>
+    </tr>
+    <tr>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 15%; text-align:center;">OS</td>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 17%; text-align:center;">Equipamento</td>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 17%; text-align:center;">Modelo</td>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 17%; text-align:center;">Marca</td>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 17%; text-align:center;">Número de Série</td>
+        <td colspan="1" style="font-weight: bold; padding-bottom: 8px; width: 17%; text-align:center;">Identif. Cliente</td>
+    </tr>
+    {% for os_rel_serv_form in doc.equipamentos_relatorio_servico %}
+    <tr>
+        <td colspan="1" style="padding-bottom: 8px; width: 15%; text-align:center;">{{os_rel_serv_form.os_rel_servico}}</td>
+        <td colspan="1" style="padding-bottom: 8px; width: 17%; text-align:center;">{{os_rel_serv_form.equipamento_rel_servico or ""}}</td>
+        <td colspan="1" style="padding-bottom: 8px; width: 17%; text-align:center;">{{os_rel_serv_form.equipment_model_rel_servico or ""}}</td>
+        <td colspan="1" style="padding-bottom: 8px; width: 17%; text-align:center;">{{os_rel_serv_form.marca_rel_servico or ""}}</td>
+        <td colspan="1" style="padding-bottom: 8px; width: 17%; text-align:center;">{{os_rel_serv_form.numero_serie_rel_servico or ""}}</td>
+        <td colspan="1" style="padding-bottom: 8px; width: 17%; text-align:center;">{{os_rel_serv_form.identif_cliente_rel_servico or ""}}</td>
+    </tr>
+    <tr>
+  <td colspan="6" style="padding-bottom: 8px; width: 100%;">
+        <b>Observações</b>
+        <div style="font-weight: normal; white-space: pre-line;">{{ os_rel_serv_form.obs_rel_servico or "" }}</div>
+        {% if os_rel_serv_form.cal_rbc_rel or os_rel_serv_form.cal_rastreavel_rel or os_rel_serv_form.man_prev_rel or os_rel_serv_form.man_corretiva_rel or os_rel_serv_form.qualificacao_rbc_temperatura_rel or os_rel_serv_form.troca_pecas_rel or os_rel_serv_form.quais_pecas_rel %}
+        <b>Serviços Realizados</b><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.cal_rbc_rel %} 
+            <span>✔️ CALIBRAÇÃO RBC</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.cal_rastreavel_rel %} 
+            <span>✔️ CALIBRAÇÃO RASTREÁVEL</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.man_prev_rel %} 
+            <span>✔️ MANUTENÇÃO PREVENTIVA</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.man_corretiva_rel %} 
+            <span>✔️ MANUTENÇÃO CORRETIVA</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.qualificacao_rbc_temperatura_rel %} 
+            <span>✔️ QUALIFICAÇÃO RBC EM TEMPERATURA</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.troca_pecas_rel %} 
+            <span>✔️ TROCA DE PEÇAS</span><br/>
+        {% endif %}
+        
+        {% if os_rel_serv_form.quais_pecas_rel %} 
+            <span>{{ os_rel_serv_form.quais_pecas_rel }}</span>
+        {% endif %}
+        <br/>
+        {% if os_rel_serv_form.repair_status == "Liberado" %}
+        <b>Status do Conserto:</b> Liberado ao uso
+        {% elif os_rel_serv_form.repair_status == "Liberado com Restrição" %}
+        <b>Status do Conserto:</b> Liberado com Restrição
+        {% elif os_rel_serv_form.repair_status == "Não Liberado" %}
+        <b>Status do Conserto:</b> Não liberado ao uso
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+<br/>
+
+    
+<!--Técnico ER e Contratante responsável-->
+<table style="width: 100%; border-collapse: collapse; font-size:9px;">
+ 
+    <tr>
+        <td colspan="6" style="font-weight: bold; padding-bottom: 8px; width: 100%;">3. Técnico ER e Contratante Responsável:</td>
+    
+    </tr>
+    <tr>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 15%;">Técnico ER:</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 35%;">{{ doc.responsavel_tecnico }}</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 15%;">Término:</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 35%;">{{ doc.termino }}</td>
+    </tr>
+    <tr>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 15%;">Responsável:</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 35%;">{{ doc.contratante_responsavel or ""}}</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 15%;">E-mail:</td>
+        <td colspan="1.5" style="padding-bottom: 8px; width: 35%;">{{ doc.email_rel_servico or "" }}</td>
+    </tr>
+
+</table>
+<!---->

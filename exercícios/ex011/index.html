@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Imagens de diferentes tamanhos</h1>  
+    <picture>
+    <source media ="(max-width:750px)" srcset="img/pequeno.png" type="image/png">
+    <source media="(max-width:1050px)"srcset="img/medio.png" type="image/png">    
+    <img src="img/grande.png" alt="imagem alternativa">
+    </picture>  
+    <h1>reproduzindo audio</h1>
+    <p>Aprendendo a reproduzir audio em html5</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/sHFeuBlBUos?si=Lc3MFNwKrn2La7KF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <audio preload="metadata" controls autoplay loop></audio>
+    <source src="audio/happy-mistake.mp3" type="audio/mpeg">
+    </audio>
+</body>
+</html>
